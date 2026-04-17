@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://b0edelq78t3rx"]
+
+[ext_resource type="PackedScene" uid="uid://bo4opnevbgyhh" path="res://player.tscn" id="1_ig7tw"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7dm0k"]
+size = Vector3(2, 0.2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ig7tw"]
+size = Vector3(2, 0.2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
+size = Vector3(2, 0.2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h2yge"]
+size = Vector3(2, 0.2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1bvp3"]
+size = Vector3(4, 2.5, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lquwl"]
+size = Vector3(4, 2.5, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7mycd"]
+size = Vector3(0.2, 2.5, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_272bh"]
+size = Vector3(0.2, 2.5, 4)
+
+[node name="Main" type="Node3D" unique_id=1940551357]
+
+[node name="World" type="Node3D" parent="." unique_id=1639475717]
+
+[node name="Floor_00" type="MeshInstance3D" parent="World" unique_id=862735930]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
+mesh = SubResource("BoxMesh_7dm0k")
+
+[node name="Floor_10" type="MeshInstance3D" parent="World" unique_id=1618915121]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
+mesh = SubResource("BoxMesh_ig7tw")
+
+[node name="Floor_01" type="MeshInstance3D" parent="World" unique_id=608756758]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
+mesh = SubResource("BoxMesh_0xm2m")
+
+[node name="Floor_11" type="MeshInstance3D" parent="World" unique_id=1352859292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
+mesh = SubResource("BoxMesh_h2yge")
+
+[node name="NorthWall" type="MeshInstance3D" parent="World" unique_id=981404271]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -2)
+mesh = SubResource("BoxMesh_1bvp3")
+
+[node name="SouthWall" type="MeshInstance3D" parent="World" unique_id=643445464]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 2)
+mesh = SubResource("BoxMesh_lquwl")
+
+[node name="WestWall" type="MeshInstance3D" parent="World" unique_id=880817905]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.25, 0)
+mesh = SubResource("BoxMesh_7mycd")
+
+[node name="EastWall" type="MeshInstance3D" parent="World" unique_id=1132614659]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.25, 0)
+mesh = SubResource("BoxMesh_272bh")
+
+[node name="PlayerSpawn" type="Node3D" parent="." unique_id=1666715308]
+
+[node name="Player" parent="PlayerSpawn" unique_id=476161354 instance=ExtResource("1_ig7tw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1555891352]
+transform = Transform3D(0.8660254, -0.35355338, 0.35355338, 0, 0.70710677, 0.70710677, -0.5, -0.6123724, 0.6123724, 0, 4.8966923, 0)
