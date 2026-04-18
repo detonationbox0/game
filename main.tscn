@@ -1,19 +1,36 @@
 [gd_scene format=3 uid="uid://b0edelq78t3rx"]
 
 [ext_resource type="Texture2D" uid="uid://dqrjv5xxff8y5" path="res://Assets/aesprite/stone_wall.png" id="1_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://cwgak0yt5128y" path="res://Assets/aesprite/dirt_floor.png" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://bo4opnevbgyhh" path="res://player.tscn" id="1_ig7tw"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_7dm0k"]
 size = Vector3(2, 0.2, 2)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7mycd"]
+albedo_texture = ExtResource("1_h2yge")
+uv1_scale = Vector3(14, 7, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_ig7tw"]
 size = Vector3(2, 0.2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_272bh"]
+albedo_texture = ExtResource("1_h2yge")
+uv1_scale = Vector3(14, 7, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
 size = Vector3(2, 0.2, 2)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5vw27"]
+albedo_texture = ExtResource("1_h2yge")
+uv1_scale = Vector3(14, 7, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_h2yge"]
 size = Vector3(2, 0.2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kek77"]
+albedo_texture = ExtResource("1_h2yge")
+uv1_scale = Vector3(14, 7, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_1bvp3"]
 size = Vector3(4, 2.5, 0.2)
@@ -21,6 +38,7 @@ size = Vector3(4, 2.5, 0.2)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2yge"]
 albedo_texture = ExtResource("1_0xm2m")
 uv1_scale = Vector3(14, 7, 14)
+texture_filter = 0
 
 [sub_resource type="BoxMesh" id="BoxMesh_lquwl"]
 size = Vector3(4, 2.5, 0.2)
@@ -28,6 +46,7 @@ size = Vector3(4, 2.5, 0.2)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
 albedo_texture = ExtResource("1_0xm2m")
 uv1_scale = Vector3(14, 7, 14)
+texture_filter = 0
 
 [sub_resource type="BoxMesh" id="BoxMesh_7mycd"]
 size = Vector3(0.2, 2.5, 4)
@@ -35,6 +54,7 @@ size = Vector3(0.2, 2.5, 4)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
 albedo_texture = ExtResource("1_0xm2m")
 uv1_scale = Vector3(14, 7, 1)
+texture_filter = 0
 
 [sub_resource type="BoxMesh" id="BoxMesh_272bh"]
 size = Vector3(0.2, 2.5, 4)
@@ -42,6 +62,7 @@ size = Vector3(0.2, 2.5, 4)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lquwl"]
 albedo_texture = ExtResource("1_0xm2m")
 uv1_scale = Vector3(14, 7, 1)
+texture_filter = 0
 
 [node name="Main" type="Node3D" unique_id=1940551357]
 
@@ -50,18 +71,22 @@ uv1_scale = Vector3(14, 7, 1)
 [node name="Floor_00" type="MeshInstance3D" parent="World" unique_id=862735930]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
 mesh = SubResource("BoxMesh_7dm0k")
+surface_material_override/0 = SubResource("StandardMaterial3D_7mycd")
 
 [node name="Floor_10" type="MeshInstance3D" parent="World" unique_id=1618915121]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
 mesh = SubResource("BoxMesh_ig7tw")
+surface_material_override/0 = SubResource("StandardMaterial3D_272bh")
 
 [node name="Floor_01" type="MeshInstance3D" parent="World" unique_id=608756758]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
 mesh = SubResource("BoxMesh_0xm2m")
+surface_material_override/0 = SubResource("StandardMaterial3D_5vw27")
 
 [node name="Floor_11" type="MeshInstance3D" parent="World" unique_id=1352859292]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
 mesh = SubResource("BoxMesh_h2yge")
+surface_material_override/0 = SubResource("StandardMaterial3D_kek77")
 
 [node name="NorthWall" type="MeshInstance3D" parent="World" unique_id=981404271]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -2)

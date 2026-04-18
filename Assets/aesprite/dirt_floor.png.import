@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqrjv5xxff8y5"
-path.s3tc="res://.godot/imported/stone_wall.png-1b3ba33dff7569c588f5a40588dde48a.s3tc.ctex"
+uid="uid://cwgak0yt5128y"
+path.s3tc="res://.godot/imported/dirt_floor.png-cc43d82b1e6e5640afa4a2ccc848a6d0.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/aesprite/stone_wall.png"
-dest_files=["res://.godot/imported/stone_wall.png-1b3ba33dff7569c588f5a40588dde48a.s3tc.ctex"]
+source_file="res://Assets/aesprite/dirt_floor.png"
+dest_files=["res://.godot/imported/dirt_floor.png-cc43d82b1e6e5640afa4a2ccc848a6d0.s3tc.ctex"]
 
 [params]
 
@@ -24,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
