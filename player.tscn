@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://bo4opnevbgyhh"]
 
-[ext_resource type="Script" path="res://Player.gd" id="1_6c71q"]
+[ext_resource type="Script" uid="uid://dfrex7lawjeoq" path="res://Player.gd" id="1_6c71q"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_sh265"]
 size = Vector3(0.6, 1.6, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4flbx"]
+size = Vector3(0.2, 0.2, 2)
 
 [node name="Player" type="Node3D" unique_id=476161354]
 script = ExtResource("1_6c71q")
@@ -15,3 +18,7 @@ mesh = SubResource("BoxMesh_sh265")
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1406086150]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
 current = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2096547759]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1.3024907)
+mesh = SubResource("BoxMesh_4flbx")
