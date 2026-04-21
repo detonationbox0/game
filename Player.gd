@@ -10,7 +10,7 @@ const SOUTH := 2
 const WEST := 3
 
 # Direction offsets in grid space (x, y):
-# Used to calculate the next grid cell when moving forward.
+# Used to calculate the next grid cell when moving forward or backward.
 const DIRECTIONS: Array[Vector2i] = [
 	Vector2i(0, -1), # NORTH
 	Vector2i(1, 0), # EAST
@@ -50,6 +50,8 @@ func _unhandled_input(_event: InputEvent) -> void:
 	# User input for movement and turning
 	if Input.is_action_just_pressed("move_forward"):
 		attempt_forward_move()
+	elif Input.is_action_just_pressed("move_backward"):
+		attempt_backward_move()
 	elif Input.is_action_just_pressed("turn_left"):
 		attempt_turn_left()
 	elif Input.is_action_just_pressed("turn_right"):
@@ -134,6 +136,23 @@ func _find_nearest_floor_grid(start_position: Vector3) -> Vector2i:
 func attempt_forward_move() -> void:
 	# Add to the direction quantity to get the next grid cell, then tween to it.
 	var next_grid: Vector2i = grid_pos + DIRECTIONS[facing]
+
+	# If there is no floor tile there, don't move.
+	if not floor_world_positions.has(next_grid):
+		return
+
+	grid_pos = next_grid
+	is_busy = true
+
+	# Move the user to the matching floor tile position.
+	var tween := create_tween()
+	tween.tween_property(self , "global_position", grid_to_world(grid_pos), move_duration)
+	tween.finished.connect(_finish_move)
+
+
+func attempt_backward_move() -> void:
+	# Subtract the direction quantity to move one grid cell backward without turning.
+	var next_grid: Vector2i = grid_pos - DIRECTIONS[facing]
 
 	# If there is no floor tile there, don't move.
 	if not floor_world_positions.has(next_grid):

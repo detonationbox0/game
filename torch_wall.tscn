@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://can7nu8rt0d2h"]
+
+[ext_resource type="Texture2D" uid="uid://xduvfq5fdmlu" path="res://assets/aesprite/torch-Sheet.png" id="1_70pg3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_80d63"]
+atlas = ExtResource("1_70pg3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ans8"]
+atlas = ExtResource("1_70pg3")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_utis8"]
+atlas = ExtResource("1_70pg3")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1lkw3"]
+atlas = ExtResource("1_70pg3")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_t134h"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_80d63")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ans8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_utis8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1lkw3")
+}],
+"loop": true,
+"name": &"burn",
+"speed": 5.0
+}]
+
+[node name="TorchWall" type="Node3D" unique_id=340274321]
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=1956599087]
+billboard = 1
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_t134h")
+animation = &"burn"
+autoplay = "burn"
+frame_progress = 0.97759724
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2056065006]
+
+[node name="Marker3D" type="Marker3D" parent="." unique_id=1538428992]
