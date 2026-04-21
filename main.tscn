@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bo4opnevbgyhh" path="res://player.tscn" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://bhm0lfxt2obt3" path="res://utils/CornerBuilder.gd" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://c7687g6j5sokw" path="res://utils/cornersegment.tscn" id="4_7mycd"]
+[ext_resource type="PackedScene" uid="uid://can7nu8rt0d2h" path="res://torch_wall.tscn" id="6_7mycd"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_7dm0k"]
 size = Vector3(2, 0.2, 2)
@@ -155,19 +156,43 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.25, 6)
 mesh = SubResource("BoxMesh_lquwl")
 surface_material_override/0 = SubResource("StandardMaterial3D_0xm2m")
 
-[node name="WestWall" type="MeshInstance3D" parent="World/Walls" unique_id=880817905]
+[node name="WestWall" type="Node3D" parent="World/Walls" unique_id=1227192045]
+
+[node name="WestWall" type="MeshInstance3D" parent="World/Walls/WestWall" unique_id=880817905]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.25, 2)
 mesh = SubResource("BoxMesh_7mycd")
 surface_material_override/0 = SubResource("StandardMaterial3D_1bvp3")
 
-[node name="EastWall" type="MeshInstance3D" parent="World/Walls" unique_id=1132614659]
+[node name="TorchWall4" parent="World/Walls/WestWall" unique_id=340274321 instance=ExtResource("6_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6858945, 1.7356617, -0.0013853312)
+
+[node name="TorchWall5" parent="World/Walls/WestWall" unique_id=1501588313 instance=ExtResource("6_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6858945, 1.7356617, 2.0582144)
+
+[node name="TorchWall6" parent="World/Walls/WestWall" unique_id=604386813 instance=ExtResource("6_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6858945, 1.7356617, 4.0046415)
+
+[node name="EastWall" type="Node3D" parent="World/Walls" unique_id=1583990224]
+
+[node name="EastWall" type="MeshInstance3D" parent="World/Walls/EastWall" unique_id=1132614659]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.25, 2)
 mesh = SubResource("BoxMesh_272bh")
 surface_material_override/0 = SubResource("StandardMaterial3D_lquwl")
 
+[node name="TorchWall" parent="World/Walls/EastWall" unique_id=1498141856 instance=ExtResource("6_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6850524, 1.7356617, -0.0013853312)
+
+[node name="TorchWall2" parent="World/Walls/EastWall" unique_id=1913175220 instance=ExtResource("6_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6850524, 1.7356617, 2.0582144)
+
+[node name="TorchWall3" parent="World/Walls/EastWall" unique_id=1338389511 instance=ExtResource("6_7mycd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6850524, 1.7356617, 4.0046415)
+
 [node name="CornerBuilder" type="Node3D" parent="World" unique_id=553927829]
 script = ExtResource("3_lquwl")
 source_segment_scene = ExtResource("4_7mycd")
+
+[node name="Torches" type="Node3D" parent="World" unique_id=1127723650]
 
 [node name="PlayerSpawn" type="Node3D" parent="." unique_id=1666715308]
 
@@ -176,6 +201,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1555891352]
 transform = Transform3D(0.8660254, -0.35355338, 0.35355338, 0, 0.70710677, 0.70710677, -0.5, -0.6123724, 0.6123724, 0, 4.8966923, 0)
+visible = false
 
 [node name="DebugCamera" type="Camera3D" parent="." unique_id=743923151]
 transform = Transform3D(1, 0, 0, 0, 0.81915206, 0.57357645, 0, -0.57357645, 0.81915206, 0, 6, 6)
