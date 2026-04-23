@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bloii133ampie"]
+
+[ext_resource type="Texture2D" uid="uid://dqrjv5xxff8y5" path="res://Assets/aesprite/stone_wall.png" id="1_an7pn"]
+
+[resource]
+albedo_texture = ExtResource("1_an7pn")
+uv1_scale = Vector3(2, 2, 2)
+uv1_triplanar = true
+uv1_world_triplanar = true
+texture_filter = 0
