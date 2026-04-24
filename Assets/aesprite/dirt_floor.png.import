@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cwgak0yt5128y"
-path.s3tc="res://.godot/imported/dirt_floor.png-cc43d82b1e6e5640afa4a2ccc848a6d0.s3tc.ctex"
+path.s3tc="res://.godot/imported/dirt_floor.png-ba88868ca1ec03658810e01598b40d96.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/aesprite/dirt_floor.png"
-dest_files=["res://.godot/imported/dirt_floor.png-cc43d82b1e6e5640afa4a2ccc848a6d0.s3tc.ctex"]
+source_file="res://assets/aesprite/dirt_floor.png"
+dest_files=["res://.godot/imported/dirt_floor.png-ba88868ca1ec03658810e01598b40d96.s3tc.ctex"]
 
 [params]
 

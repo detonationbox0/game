@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://b0edelq78t3rx"]
 
-[ext_resource type="Texture2D" uid="uid://dqrjv5xxff8y5" path="res://Assets/aesprite/stone_wall.png" id="1_0xm2m"]
-[ext_resource type="Material" uid="uid://6i1psyjxlrx7" path="res://Assets/aesprite/dirt_floor.tres" id="1_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://dqrjv5xxff8y5" path="res://assets/aesprite/stone_wall.png" id="1_0xm2m"]
+[ext_resource type="Material" uid="uid://6i1psyjxlrx7" path="res://assets/aesprite/dirt_floor.tres" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://bo4opnevbgyhh" path="res://player.tscn" id="1_ig7tw"]
-[ext_resource type="Material" uid="uid://bloii133ampie" path="res://Assets/aesprite/stone_wall.tres" id="2_272bh"]
+[ext_resource type="Material" path="res://Assets/aesprite/stone_wall.tres" id="2_272bh"]
 [ext_resource type="Script" uid="uid://bhm0lfxt2obt3" path="res://utils/CornerBuilder.gd" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://c7687g6j5sokw" path="res://utils/cornersegment.tscn" id="4_7mycd"]
 [ext_resource type="PackedScene" uid="uid://can7nu8rt0d2h" path="res://torch_wall.tscn" id="6_7mycd"]
