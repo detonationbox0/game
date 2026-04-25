@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://caavmjisqgdlr"]
+
+[ext_resource type="PackedScene" uid="uid://t6nnhvyw1kn1" path="res://assets/models/AR_3.gltf" id="1_y2p1h"]
+
+[node name="AR_3" unique_id=1264403980 instance=ExtResource("1_y2p1h")]

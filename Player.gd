@@ -1,205 +1,94 @@
 extends Node3D
 
-@export var move_duration: float = 0.2
-@export var turn_duration: float = 0.15
+@export var move_speed: float = 3.0
+@export var mouse_sensitivity: float = 0.0025
+@export var weapon_sway_amount: float = 0.0025
+@export var weapon_sway_limit: float = 0.04
+@export var weapon_sway_speed: float = 5.0
 
-# Indexes for the DIRECTIONS array
-const NORTH := 0
-const EAST := 1
-const SOUTH := 2
-const WEST := 3
+@onready var camera: Camera3D = $Camera3D
+@onready var viewmodel_viewport: SubViewport = $ViewmodelLayer/ViewmodelContainer/ViewmodelViewport
+@onready var viewmodel_camera: Camera3D = $ViewmodelLayer/ViewmodelContainer/ViewmodelViewport/ViewmodelCamera
+@onready var weapon_mount: Node3D = $ViewmodelLayer/ViewmodelContainer/ViewmodelViewport/ViewmodelCamera/WeaponMount
 
-# Direction offsets in grid space (x, y):
-# Used to calculate the next grid cell when moving forward or backward.
-const DIRECTIONS: Array[Vector2i] = [
-	Vector2i(0, -1), # NORTH
-	Vector2i(1, 0), # EAST
-	Vector2i(0, 1), # SOUTH
-	Vector2i(-1, 0), # WEST
-]
-
-# Current Player position state
-var grid_pos := Vector2i.ZERO
-var facing := NORTH
-var is_busy := false
-var has_valid_setup := false
-var floor_world_positions: Dictionary = {}
+var camera_pitch := 0.0
+var weapon_rest_rotation := Vector3.ZERO
+var weapon_sway_target := Vector3.ZERO
 
 func _ready() -> void:
-	# Read the authored floor tiles on load, then use the nearest one as the starting grid cell.
-	_discover_floor_tiles()
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	weapon_rest_rotation = weapon_mount.rotation
+	viewmodel_viewport.world_3d = get_viewport().world_3d
+	_set_viewmodel_layer(weapon_mount)
+	_sync_viewmodel_camera()
 
-	if floor_world_positions.is_empty():
-		push_error("Player: No floor tiles were found under World/Floors. Movement is disabled.")
+
+func _process(delta: float) -> void:
+	_handle_movement(delta)
+	_update_weapon_sway(delta)
+	_sync_viewmodel_camera()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("menu"):
+		_toggle_mouse_capture()
 		return
 
-	var start_grid := _find_nearest_floor_grid(global_position)
+	if event is InputEventMouseMotion:
+		_handle_mouse_look(event.relative)
 
-	if start_grid.x < 0:
-		push_error("Player: Could not match the starting Player position to a floor tile. Movement is disabled.")
+
+func _handle_mouse_look(mouse_delta: Vector2) -> void:
+	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 		return
 
-	grid_pos = start_grid
-	rotation = Vector3(0.0, facing_to_y_rotation(facing), 0.0)
-	has_valid_setup = true
+	rotate_y(-mouse_delta.x * mouse_sensitivity)
 
-func _unhandled_input(_event: InputEvent) -> void:
-	if not has_valid_setup or is_busy:
+	# Pitch only the camera so the player's movement stays level on the floor.
+	camera_pitch = clamp(camera_pitch - mouse_delta.y * mouse_sensitivity, -PI * 0.45, PI * 0.45)
+	camera.rotation.x = camera_pitch
+	_set_weapon_sway_target(mouse_delta)
+	_sync_viewmodel_camera()
+
+
+func _handle_movement(delta: float) -> void:
+	var input_direction := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+
+	if input_direction.is_zero_approx():
 		return
 
-	# User input for movement and turning
-	if Input.is_action_just_pressed("move_forward"):
-		attempt_forward_move()
-	elif Input.is_action_just_pressed("move_backward"):
-		attempt_backward_move()
-	elif Input.is_action_just_pressed("turn_left"):
-		attempt_turn_left()
-	elif Input.is_action_just_pressed("turn_right"):
-		attempt_turn_right()
-
-# Convert a grid position into the authored world position of its matching floor tile.
-# See docs/math/grid-to-world-position.qmd
-func grid_to_world(grid: Vector2i) -> Vector3:
-	if not floor_world_positions.has(grid):
-		push_error("Player: Tried to use missing floor tile %s." % [grid])
-		return global_position
-
-	return floor_world_positions[grid]
-
-# Convert facing (N/E/S/W) into a Y rotation (90° per step)
-# Remember: facing = how many 90° turns from NORTH
-# See docs/math/facing-index-to-y-rotation.qmd
-func facing_to_y_rotation(facing_index: int) -> float:
-	return -facing_index * PI * 0.5
-
-func _discover_floor_tiles() -> void:
-	var floors := get_tree().current_scene.get_node_or_null("World/Floors")
-	floor_world_positions.clear()
-
-	if floors == null:
-		push_error("Player: Could not find World/Floors. Movement is disabled.")
-		return
-
-	for child in floors.get_children():
-		var floor_node := child as Node3D
-
-		if floor_node == null:
-			continue
-
-		var floor_grid := _parse_floor_grid_pos(floor_node.name)
-
-		if floor_grid.x < 0:
-			continue
-
-		floor_world_positions[floor_grid] = floor_node.global_position
+	var move_direction := global_transform.basis.x * input_direction.x
+	move_direction += global_transform.basis.z * input_direction.y
+	global_position += move_direction.normalized() * move_speed * delta
 
 
-func _parse_floor_grid_pos(node_name: String) -> Vector2i:
-	if not node_name.begins_with("Floor_"):
-		return Vector2i(-1, -1)
-
-	var parts := node_name.split("_", false)
-
-	# Floor_x12_y3 means x = 12, y = 3.
-	if parts.size() != 3:
-		return Vector2i(-1, -1)
-
-	if not parts[1].begins_with("x") or not parts[2].begins_with("y"):
-		return Vector2i(-1, -1)
-
-	var x_text := parts[1].trim_prefix("x")
-	var y_text := parts[2].trim_prefix("y")
-
-	if x_text.is_empty() or y_text.is_empty():
-		return Vector2i(-1, -1)
-
-	if not x_text.is_valid_int() or not y_text.is_valid_int():
-		return Vector2i(-1, -1)
-
-	return Vector2i(x_text.to_int(), y_text.to_int())
+func _toggle_mouse_capture() -> void:
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
-func _find_nearest_floor_grid(start_position: Vector3) -> Vector2i:
-	var nearest_grid := Vector2i(-1, -1)
-	var nearest_distance := INF
-
-	for floor_grid in floor_world_positions.keys():
-		var floor_position: Vector3 = floor_world_positions[floor_grid]
-		var distance := start_position.distance_to(floor_position)
-
-		if distance < nearest_distance:
-			nearest_distance = distance
-			nearest_grid = floor_grid
-
-	return nearest_grid
-
-func attempt_forward_move() -> void:
-	# Add to the direction quantity to get the next grid cell, then tween to it.
-	var next_grid: Vector2i = grid_pos + DIRECTIONS[facing]
-
-	# If there is no floor tile there, don't move.
-	if not floor_world_positions.has(next_grid):
-		return
-
-	grid_pos = next_grid
-	is_busy = true
-
-	# Move the user to the matching floor tile position.
-	var tween := create_tween()
-	tween.tween_property(self , "global_position", grid_to_world(grid_pos), move_duration)
-	tween.finished.connect(_finish_move)
+func _sync_viewmodel_camera() -> void:
+	viewmodel_camera.global_transform = camera.global_transform
 
 
-func attempt_backward_move() -> void:
-	# Subtract the direction quantity to move one grid cell backward without turning.
-	var next_grid: Vector2i = grid_pos - DIRECTIONS[facing]
+func _set_viewmodel_layer(node: Node) -> void:
+	if node is VisualInstance3D:
+		# Keep swapped weapon models visible only to the viewmodel camera.
+		(node as VisualInstance3D).layers = 2
 
-	# If there is no floor tile there, don't move.
-	if not floor_world_positions.has(next_grid):
-		return
-
-	grid_pos = next_grid
-	is_busy = true
-
-	# Move the user to the matching floor tile position.
-	var tween := create_tween()
-	tween.tween_property(self , "global_position", grid_to_world(grid_pos), move_duration)
-	tween.finished.connect(_finish_move)
+	for child in node.get_children():
+		_set_viewmodel_layer(child)
 
 
-func attempt_turn_left() -> void:
-	# Works out to the direction to the left of the current facing
-	# North -> West
-	# East -> North
-	facing = (facing + 3) % 4
-	# Turning...
-	is_busy = true
-
-	# Tween one quarter-turn left from the current angle,
-	# then snap to the exact facing angle when finished.
-	var target_rotation := rotation.y + PI * 0.5
-	var tween := create_tween()
-	tween.tween_property(self , "rotation:y", target_rotation, turn_duration)
-	tween.finished.connect(_finish_turn)
+func _set_weapon_sway_target(mouse_delta: Vector2) -> void:
+	var sway_x: float = clamp(-mouse_delta.y * weapon_sway_amount, -weapon_sway_limit, weapon_sway_limit)
+	var sway_y: float = clamp(-mouse_delta.x * weapon_sway_amount, -weapon_sway_limit, weapon_sway_limit)
+	weapon_sway_target = Vector3(sway_x, sway_y, 0.0)
 
 
-func attempt_turn_right() -> void:
-	facing = (facing + 1) % 4
-	is_busy = true
-
-	# Tween one quarter-turn right from the current angle,
-	# then snap to the exact facing angle when finished.
-	var target_rotation := rotation.y - PI * 0.5
-	var tween := create_tween()
-	tween.tween_property(self , "rotation:y", target_rotation, turn_duration)
-	tween.finished.connect(_finish_turn)
-
-
-func _finish_move() -> void:
-	global_position = grid_to_world(grid_pos)
-	is_busy = false # Resume...
-
-
-func _finish_turn() -> void:
-	rotation = Vector3(0.0, facing_to_y_rotation(facing), 0.0)
-	is_busy = false # Resume...
+func _update_weapon_sway(delta: float) -> void:
+	var weight := 1.0 - exp(-weapon_sway_speed * delta)
+	weapon_mount.rotation = weapon_mount.rotation.lerp(weapon_rest_rotation + weapon_sway_target, weight)
+	weapon_sway_target = weapon_sway_target.lerp(Vector3.ZERO, weight)

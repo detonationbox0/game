@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqrjv5xxff8y5"
-path.s3tc="res://.godot/imported/stone_wall.png-4830bcb814ad3e121afa3f6ee69d6187.s3tc.ctex"
+uid="uid://c5g7pi2nfhirh"
+path.s3tc="res://.godot/imported/retro_wood_table_retro_wood_table_wood_64.png-f9e3b53aee1b4dd362625d5bca58530b.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "09b2087d6be2cfbd3653924ca8586d4e"
+}
 
 [deps]
 
-source_file="res://assets/aesprite/stone_wall.png"
-dest_files=["res://.godot/imported/stone_wall.png-4830bcb814ad3e121afa3f6ee69d6187.s3tc.ctex"]
+source_file="res://assets/models/retro_wood_table_retro_wood_table_wood_64.png"
+dest_files=["res://.godot/imported/retro_wood_table_retro_wood_table_wood_64.png-f9e3b53aee1b4dd362625d5bca58530b.s3tc.ctex"]
 
 [params]
 
@@ -24,7 +27,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

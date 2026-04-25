@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bo4opnevbgyhh"]
 
 [ext_resource type="Script" uid="uid://dfrex7lawjeoq" path="res://Player.gd" id="1_6c71q"]
+[ext_resource type="PackedScene" uid="uid://caavmjisqgdlr" path="res://ar_3.tscn" id="2_onrkg"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_sh265"]
 size = Vector3(0.6, 1.6, 0.6)
@@ -14,4 +15,36 @@ mesh = SubResource("BoxMesh_sh265")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1406086150]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+cull_mask = 1
 current = true
+
+[node name="ViewmodelLayer" type="CanvasLayer" parent="." unique_id=1863954892]
+layer = 10
+
+[node name="ViewmodelContainer" type="SubViewportContainer" parent="ViewmodelLayer" unique_id=69063134]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="ViewmodelViewport" type="SubViewport" parent="ViewmodelLayer/ViewmodelContainer" unique_id=105525580]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="ViewmodelCamera" type="Camera3D" parent="ViewmodelLayer/ViewmodelContainer/ViewmodelViewport" unique_id=1470477739]
+cull_mask = 2
+current = true
+fov = 70.0
+near = 0.01
+far = 10.0
+
+[node name="WeaponMount" type="Node3D" parent="ViewmodelLayer/ViewmodelContainer/ViewmodelViewport/ViewmodelCamera" unique_id=890111250]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.25, -0.55)
+
+[node name="AR_3" parent="ViewmodelLayer/ViewmodelContainer/ViewmodelViewport/ViewmodelCamera/WeaponMount" unique_id=1432111304 instance=ExtResource("2_onrkg")]
+transform = Transform3D(-3.278354e-08, 0, 0.75, 0, 0.75, 0, -0.75, 0, -3.278354e-08, -0.061508596, -0.13578248, 0.06376755)
