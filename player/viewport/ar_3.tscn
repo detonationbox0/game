@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://caavmjisqgdlr"]
+
+[ext_resource type="Script" uid="uid://b2jn0twhw63fa" path="res://player/viewport/AdsViewmodel.gd" id="1_dhirm"]
+[ext_resource type="PackedScene" uid="uid://t6nnhvyw1kn1" path="res://Assets/models/AR_3.gltf" id="1_y2p1h"]
+
+[node name="AR_3" type="Node3D" unique_id=1611589743]
+script = ExtResource("1_dhirm")
+ads_fov_delta = -30.0
+
+[node name="ViewmodelOffset" type="Node3D" parent="." unique_id=1203627375]
+transform = Transform3D(-3.278354e-08, 0, 0.75, 0, 0.75, 0, -0.75, 0, -3.278354e-08, -0.06, -0.14, 0.06)
+
+[node name="Model" parent="ViewmodelOffset" unique_id=675173814 instance=ExtResource("1_y2p1h")]
+
+[node name="AdsPose" type="Node3D" parent="." unique_id=126453881]
+transform = Transform3D(-3.278354e-08, 0, 0.75, 0, 0.75, 0, -0.75, 0, -3.278354e-08, -0.24988249, -0.07348479, 0.15258175)
+
+[node name="Model2" parent="." unique_id=1825114226 instance=ExtResource("1_y2p1h")]
+transform = Transform3D(-3.278354e-08, 0, 0.75, 0, 0.75, 0, -0.75, 0, -3.278354e-08, -0.24988249, -0.07348479, 0.15258175)
+visible = false
+
+[node name="PreviewCamera" type="Camera3D" parent="." unique_id=1953614786]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.25, 0.55)
+fov = 70.0
+near = 0.01
+far = 10.0

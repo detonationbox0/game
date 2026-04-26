@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://bo4opnevbgyhh"]
 
-[ext_resource type="Script" uid="uid://dfrex7lawjeoq" path="res://Player.gd" id="1_6c71q"]
-[ext_resource type="PackedScene" uid="uid://caavmjisqgdlr" path="res://ar_3.tscn" id="2_onrkg"]
+[ext_resource type="Script" uid="uid://dfrex7lawjeoq" path="res://player/Player.gd" id="1_6c71q"]
+[ext_resource type="Script" uid="uid://bd3fw6rol2x6w" path="res://player/viewport/WeaponMount.gd" id="2_exev2"]
+[ext_resource type="PackedScene" uid="uid://doq4owk1h408s" path="res://player/viewport/hands.tscn" id="3_i3pqv"]
+[ext_resource type="Texture2D" uid="uid://cfo02cgtjc0ck" path="res://Assets/aesprite/crosshair_11.png" id="4_yw30f"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_sh265"]
 size = Vector3(0.6, 1.6, 0.6)
@@ -17,6 +19,12 @@ mesh = SubResource("BoxMesh_sh265")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
 cull_mask = 1
 current = true
+
+[node name="RayCast3D" type="RayCast3D" parent="Camera3D" unique_id=1715592461]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -0.083961725, 0)
+target_position = Vector3(0, 0, 1)
+collision_mask = 4
+collide_with_areas = true
 
 [node name="ViewmodelLayer" type="CanvasLayer" parent="." unique_id=1863954892]
 layer = 10
@@ -37,6 +45,7 @@ size = Vector2i(640, 360)
 render_target_update_mode = 4
 
 [node name="ViewmodelCamera" type="Camera3D" parent="ViewmodelLayer/ViewmodelContainer/ViewmodelViewport" unique_id=1470477739]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
 cull_mask = 2
 current = true
 fov = 70.0
@@ -45,6 +54,14 @@ far = 10.0
 
 [node name="WeaponMount" type="Node3D" parent="ViewmodelLayer/ViewmodelContainer/ViewmodelViewport/ViewmodelCamera" unique_id=890111250]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.25, -0.55)
+script = ExtResource("2_exev2")
+equipped_viewmodel_scene = ExtResource("3_i3pqv")
+available_viewmodel_scenes = Array[PackedScene]([ExtResource("3_i3pqv")])
 
-[node name="AR_3" parent="ViewmodelLayer/ViewmodelContainer/ViewmodelViewport/ViewmodelCamera/WeaponMount" unique_id=1432111304 instance=ExtResource("2_onrkg")]
-transform = Transform3D(-3.278354e-08, 0, 0.75, 0, 0.75, 0, -0.75, 0, -3.278354e-08, -0.061508596, -0.13578248, 0.06376755)
+[node name="ViewmodelLight" type="DirectionalLight3D" parent="ViewmodelLayer/ViewmodelContainer/ViewmodelViewport" unique_id=1555891352]
+transform = Transform3D(0.8660254, -0.35355338, 0.35355338, 0, 0.70710677, 0.70710677, -0.5, -0.6123724, 0.6123724, 0, 4.8966923, 0)
+light_cull_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="ViewmodelLayer" unique_id=1649692003]
+position = Vector2(320.5, 180.5)
+texture = ExtResource("4_yw30f")

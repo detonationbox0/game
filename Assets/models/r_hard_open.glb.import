@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://t6nnhvyw1kn1"
-path="res://.godot/imported/AR_3.gltf-256ecc876d76d9889af42faf13d0b817.scn"
+uid="uid://byupmq4bxw5ip"
+path="res://.godot/imported/r_hard_open.glb-384bcad43d74cbead7657a0666e23dbb.scn"
 
 [deps]
 
-source_file="res://Assets/models/AR_3.gltf"
-dest_files=["res://.godot/imported/AR_3.gltf-256ecc876d76d9889af42faf13d0b817.scn"]
+source_file="res://Assets/models/r_hard_open.glb"
+dest_files=["res://.godot/imported/r_hard_open.glb-384bcad43d74cbead7657a0666e23dbb.scn"]
 
 [params]
 

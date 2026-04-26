@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dp5gp6sv6mie8"
-path="res://.godot/imported/retro_wood_table_wood_64.png-0614da67a10aba1e91e0000654daf4e0.ctex"
+path="res://.godot/imported/retro_wood_table_wood_64.png-62f9eb1fb50cd5bbf3102ca116053ac1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/models/retro_wood_table_wood_64.png"
-dest_files=["res://.godot/imported/retro_wood_table_wood_64.png-0614da67a10aba1e91e0000654daf4e0.ctex"]
+source_file="res://Assets/models/retro_wood_table_wood_64.png"
+dest_files=["res://.godot/imported/retro_wood_table_wood_64.png-62f9eb1fb50cd5bbf3102ca116053ac1.ctex"]
 
 [params]
 

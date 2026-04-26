@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c5g7pi2nfhirh"
-path.s3tc="res://.godot/imported/retro_wood_table_retro_wood_table_wood_64.png-f9e3b53aee1b4dd362625d5bca58530b.s3tc.ctex"
+path.s3tc="res://.godot/imported/retro_wood_table_retro_wood_table_wood_64.png-f0c4eb6a2f59b0566e6f0585d21a16d9.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/models/retro_wood_table_retro_wood_table_wood_64.png"
-dest_files=["res://.godot/imported/retro_wood_table_retro_wood_table_wood_64.png-f9e3b53aee1b4dd362625d5bca58530b.s3tc.ctex"]
+source_file="res://Assets/models/retro_wood_table_retro_wood_table_wood_64.png"
+dest_files=["res://.godot/imported/retro_wood_table_retro_wood_table_wood_64.png-f0c4eb6a2f59b0566e6f0585d21a16d9.s3tc.ctex"]
 
 [params]
 

@@ -1,11 +1,12 @@
 [gd_scene format=3 uid="uid://b0edelq78t3rx"]
 
-[ext_resource type="Texture2D" uid="uid://dqrjv5xxff8y5" path="res://assets/aesprite/stone_wall.png" id="1_0xm2m"]
-[ext_resource type="Material" uid="uid://6i1psyjxlrx7" path="res://assets/aesprite/dirt_floor.tres" id="1_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://bo4opnevbgyhh" path="res://player.tscn" id="1_ig7tw"]
-[ext_resource type="Material" path="res://assets/aesprite/stone_wall.tres" id="2_272bh"]
+[ext_resource type="Texture2D" uid="uid://dqrjv5xxff8y5" path="res://Assets/aesprite/stone_wall.png" id="1_0xm2m"]
+[ext_resource type="Material" uid="uid://6i1psyjxlrx7" path="res://Assets/aesprite/dirt_floor.tres" id="1_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://bo4opnevbgyhh" path="res://player/player.tscn" id="1_ig7tw"]
+[ext_resource type="Material" uid="uid://bloii133ampie" path="res://Assets/aesprite/stone_wall.tres" id="2_272bh"]
+[ext_resource type="PackedScene" uid="uid://dfmdl3xr5cxin" path="res://prop_AR_3.tscn" id="6_5vw27"]
 [ext_resource type="PackedScene" uid="uid://can7nu8rt0d2h" path="res://torch_wall.tscn" id="6_7mycd"]
-[ext_resource type="PackedScene" uid="uid://d2y0k1glpxxqt" path="res://assets/models/retro_wood_table.glb" id="6_272bh"]
+[ext_resource type="PackedScene" uid="uid://d2y0k1glpxxqt" path="res://Assets/models/retro_wood_table.glb" id="6_272bh"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_7dm0k"]
 size = Vector3(2, 0.2, 2)
@@ -189,14 +190,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6850524, 1.7356617, 2.05821
 [node name="TorchWall3" parent="World/Walls/EastWall" unique_id=1338389511 instance=ExtResource("6_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6850524, 1.7356617, 4.0046415)
 
+[node name="Wooden Table" parent="World" unique_id=1596974572 instance=ExtResource("6_272bh")]
+transform = Transform3D(-2.6226834e-08, 0, 0.6, 0, 0.6, 0, -0.6, 0, -2.6226834e-08, -1.4702041, 0.43928558, 0.18723798)
+
+[node name="prop_AR_3" parent="World" unique_id=464981456 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4693527, 0.81824887, 0.5322732)
+
 [node name="PlayerSpawn" type="Node3D" parent="." unique_id=1666715308]
 
 [node name="Player" parent="PlayerSpawn" unique_id=476161354 instance=ExtResource("1_ig7tw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
+mouse_sensitivity = 0.01
+gamepad_look_sensitivity = 3.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1555891352]
 transform = Transform3D(0.8660254, -0.35355338, 0.35355338, 0, 0.70710677, 0.70710677, -0.5, -0.6123724, 0.6123724, 0, 4.8966923, 0)
 visible = false
-
-[node name="retro_wood_table" parent="." unique_id=1596974572 instance=ExtResource("6_272bh")]
-transform = Transform3D(-2.6226834e-08, 0, 0.6, 0, 0.6, 0, -0.6, 0, -2.6226834e-08, -1.4702041, 0.43928558, 0.18723798)
