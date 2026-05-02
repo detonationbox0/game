@@ -5,11 +5,17 @@
 [ext_resource type="PackedScene" uid="uid://doq4owk1h408s" path="res://player/viewport/hands.tscn" id="3_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://cfo02cgtjc0ck" path="res://Assets/aesprite/crosshair_11.png" id="4_yw30f"]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yw30f"]
+
 [sub_resource type="BoxMesh" id="BoxMesh_sh265"]
 size = Vector3(0.6, 1.6, 0.6)
 
-[node name="Player" type="Node3D" unique_id=476161354]
+[node name="Player" type="CharacterBody3D" unique_id=106070762]
 script = ExtResource("1_6c71q")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1614939824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7579471, 0)
+shape = SubResource("CapsuleShape3D_yw30f")
 
 [node name="Body" type="MeshInstance3D" parent="." unique_id=379517936]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)

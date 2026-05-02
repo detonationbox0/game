@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://c6sa5jn4mnyga"]
+
+[ext_resource type="Material" uid="uid://bloii133ampie" path="res://Assets/materials/stone_wall.tres" id="1_yjdlk"]
+[ext_resource type="Script" uid="uid://b22him7u7giv7" path="res://scene/walls/wall_with_door.gd" id="2_nnj6m"]
+[ext_resource type="Texture2D" uid="uid://c5g7pi2nfhirh" path="res://Assets/models/retro_wood_table_retro_wood_table_wood_64.png" id="3_8dam2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dm8qk"]
+size = Vector3(3.3, 2.5, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8dam2"]
+size = Vector3(1.4, 0.5, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xttsr"]
+size = Vector3(3.3, 2.5, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t2jvw"]
+size = Vector3(1.4, 0.5, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_74sey"]
+size = Vector3(1.3, 2, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xttsr"]
+albedo_texture = ExtResource("3_8dam2")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fcnyd"]
+size = Vector3(1.3, 2, 0.08)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b1oin"]
+size = Vector3(1.6, 2.2, 1.2)
+
+[node name="WallWithDoor" type="Node3D" unique_id=1388816832 groups=["interactable"]]
+script = ExtResource("2_nnj6m")
+
+[node name="Visuals" type="Node3D" parent="." unique_id=1006908852]
+
+[node name="LeftWallMesh" type="MeshInstance3D" parent="Visuals" unique_id=969798891]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.35, 0, 0)
+mesh = SubResource("BoxMesh_dm8qk")
+surface_material_override/0 = ExtResource("1_yjdlk")
+
+[node name="RightWallMesh" type="MeshInstance3D" parent="Visuals" unique_id=2076469021]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35, 0, 0)
+mesh = SubResource("BoxMesh_dm8qk")
+surface_material_override/0 = ExtResource("1_yjdlk")
+
+[node name="TopWallMesh" type="MeshInstance3D" parent="Visuals" unique_id=1210755906]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("BoxMesh_8dam2")
+surface_material_override/0 = ExtResource("1_yjdlk")
+
+[node name="Collisions" type="Node3D" parent="." unique_id=1134829305]
+
+[node name="LeftWallBody" type="StaticBody3D" parent="Collisions" unique_id=1282562866]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/LeftWallBody" unique_id=577718783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.35, 0, 0)
+shape = SubResource("BoxShape3D_xttsr")
+
+[node name="RightWallBody" type="StaticBody3D" parent="Collisions" unique_id=1016585844]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/RightWallBody" unique_id=1546482639]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.35, 0, 0)
+shape = SubResource("BoxShape3D_xttsr")
+
+[node name="TopWallBody" type="StaticBody3D" parent="Collisions" unique_id=1167437527]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Collisions/TopWallBody" unique_id=825111266]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_t2jvw")
+
+[node name="DoorPivot" type="Node3D" parent="." unique_id=875220525]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, -1.25, 0)
+
+[node name="DoorMesh" type="MeshInstance3D" parent="DoorPivot" unique_id=443108578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 1, 0)
+mesh = SubResource("BoxMesh_74sey")
+surface_material_override/0 = SubResource("StandardMaterial3D_xttsr")
+
+[node name="DoorBody" type="StaticBody3D" parent="DoorPivot" unique_id=821132341]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorPivot/DoorBody" unique_id=993223824]
+shape = SubResource("BoxShape3D_fcnyd")
+
+[node name="InteractionArea" type="Area3D" parent="DoorPivot" unique_id=315183620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.65, 1, 0)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorPivot/InteractionArea" unique_id=338247565]
+shape = SubResource("BoxShape3D_b1oin")

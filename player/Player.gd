@@ -1,5 +1,5 @@
 @tool
-extends Node3D
+extends CharacterBody3D
 
 @export var move_speed: float = 3.0
 @export var mouse_sensitivity: float = 0.0025
@@ -9,12 +9,12 @@ extends Node3D
 @export var weapon_sway_speed: float = 5.0
 @export var ads_tween_duration: float = 0.12
 
-@onready var camera: Camera3D = $Camera3D
-@onready var viewmodel_viewport: SubViewport = $ViewmodelLayer/ViewmodelContainer/ViewmodelViewport
-@onready var viewmodel_camera: Camera3D = $ViewmodelLayer/ViewmodelContainer/ViewmodelViewport/ViewmodelCamera
-@onready var weapon_mount: WeaponMount = $ViewmodelLayer/ViewmodelContainer/ViewmodelViewport/ViewmodelCamera/WeaponMount
-@onready var interact_ray: RayCast3D = $Camera3D/RayCast3D
-@onready var reticle: Sprite2D = $ViewmodelLayer/Sprite2D
+@onready var camera: Camera3D = get_node_or_null("Camera3D")
+@onready var viewmodel_viewport: SubViewport = get_node_or_null("ViewmodelLayer/ViewmodelContainer/ViewmodelViewport")
+@onready var viewmodel_camera: Camera3D = get_node_or_null("ViewmodelLayer/ViewmodelContainer/ViewmodelViewport/ViewmodelCamera")
+@onready var weapon_mount: WeaponMount = get_node_or_null("ViewmodelLayer/ViewmodelContainer/ViewmodelViewport/ViewmodelCamera/WeaponMount")
+@onready var interact_ray: RayCast3D = get_node_or_null("Camera3D/RayCast3D")
+@onready var reticle: Sprite2D = get_node_or_null("ViewmodelLayer/Sprite2D")
 
 var camera_pitch := 0.0
 var weapon_rest_rotation := Vector3.ZERO
@@ -29,6 +29,9 @@ var ads_fov_tween: Tween
 
 func _ready() -> void:
 	print("RUNNING...")
+	if camera == null or viewmodel_camera == null or weapon_mount == null:
+		return
+
 	weapon_rest_rotation = weapon_mount.rotation
 	default_camera_fov = camera.fov
 	default_viewmodel_camera_fov = viewmodel_camera.fov
@@ -45,21 +48,25 @@ func _process(delta: float) -> void:
 		_sync_viewmodel_camera()
 		return
 
-	_handle_movement(delta)
 	_update_iron_sights()
 	_handle_gamepad_look(delta)
 	_update_weapon_sway(delta)
 	_sync_viewmodel_camera()
 
 func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+
+	_handle_movement()
+
 	var hit_prop := _get_hit_selectable_prop()
 	if hit_prop != current_selected_prop:
-		if current_selected_prop != null:
+		if current_selected_prop != null and current_selected_prop.has_method("set_selected"):
 			current_selected_prop.set_selected(false)
 
 		current_selected_prop = hit_prop
 
-		if current_selected_prop != null:
+		if current_selected_prop != null and current_selected_prop.has_method("set_selected"):
 			current_selected_prop.set_selected(true)
 
 #endregion
@@ -89,6 +96,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _get_hit_selectable_prop() -> Node:
+	if interact_ray == null:
+		return null
+
+	interact_ray.force_raycast_update()
+
 	if not interact_ray.is_colliding():
 		return null
 
@@ -100,7 +112,7 @@ func _get_hit_selectable_prop() -> Node:
 	var node := collider as Node
 
 	while node != null:
-		if node.is_in_group("selectable_prop"):
+		if node.is_in_group("selectable_prop") or node.is_in_group("interactable"):
 			return node
 
 		node = node.get_parent()
@@ -108,7 +120,15 @@ func _get_hit_selectable_prop() -> Node:
 	return null
 
 func _handle_select() -> void:
+	var target := _get_hit_selectable_prop()
+	if target != null:
+		current_selected_prop = target
+
 	if current_selected_prop == null:
+		return
+
+	if current_selected_prop.has_method("interact"):
+		current_selected_prop.interact(self)
 		return
 
 	if current_selected_prop.has_method("pickup"):
@@ -117,6 +137,9 @@ func _handle_select() -> void:
 		selected_prop.pickup(self)
 
 func _update_iron_sights() -> void:
+	if reticle == null:
+		return
+
 	var should_aim := Input.is_action_pressed("iron_sights") and _equipped_viewmodel_can_aim()
 	reticle.visible = not should_aim
 	if should_aim == is_iron_sights_active:
@@ -126,10 +149,16 @@ func _update_iron_sights() -> void:
 	_apply_iron_sights_state()
 
 func _equipped_viewmodel_can_aim() -> bool:
+	if weapon_mount == null:
+		return false
+
 	var equipped_viewmodel := weapon_mount.equipped_viewmodel
 	return equipped_viewmodel != null and equipped_viewmodel.has_method("set_aiming")
 
 func _apply_iron_sights_state() -> void:
+	if camera == null or viewmodel_camera == null or weapon_mount == null:
+		return
+
 	var equipped_viewmodel := weapon_mount.equipped_viewmodel
 	var fov_delta := 0.0
 	var tween_duration := ads_tween_duration
@@ -182,15 +211,16 @@ func _apply_look_delta(look_delta: Vector2, sensitivity: float) -> void:
 	_sync_viewmodel_camera()
 
 
-func _handle_movement(delta: float) -> void:
+func _handle_movement() -> void:
 	var input_direction := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-
-	if input_direction.is_zero_approx():
-		return
-
 	var move_direction := global_transform.basis.x * input_direction.x
 	move_direction += global_transform.basis.z * input_direction.y
-	global_position += move_direction.normalized() * move_speed * delta
+	move_direction.y = 0.0
+	move_direction = move_direction.normalized()
+
+	velocity.x = move_direction.x * move_speed
+	velocity.z = move_direction.z * move_speed
+	move_and_slide()
 
 
 func _toggle_mouse_capture() -> void:
@@ -202,19 +232,31 @@ func _toggle_mouse_capture() -> void:
 #region Weapon Viewport Logic
 
 func _sync_viewmodel_camera() -> void:
+	if camera == null or viewmodel_camera == null:
+		return
+
 	viewmodel_camera.global_transform = camera.global_transform
 
 func equip_weapon_viewmodel(scene: PackedScene) -> void:
+	if weapon_mount == null:
+		return
+
 	weapon_mount.equip_viewmodel(scene)
 	_update_iron_sights()
 
 func acquire_weapon_viewmodel(scene: PackedScene) -> void:
+	if weapon_mount == null:
+		return
+
 	if not weapon_mount.available_viewmodel_scenes.has(scene):
 		weapon_mount.available_viewmodel_scenes.append(scene)
 
 	equip_weapon_viewmodel(scene)
 
 func cycle_weapon_viewmodel() -> void:
+	if weapon_mount == null:
+		return
+
 	weapon_mount.cycle_viewmodel()
 	_update_iron_sights()
 
@@ -229,6 +271,9 @@ func _set_weapon_sway_target(mouse_delta: Vector2) -> void:
 	weapon_sway_target = Vector3(sway_x, sway_y, 0.0)
 
 func _update_weapon_sway(delta: float) -> void:
+	if weapon_mount == null:
+		return
+
 	var weight := 1.0 - exp(-weapon_sway_speed * delta)
 	weapon_mount.rotation = weapon_mount.rotation.lerp(weapon_rest_rotation + weapon_sway_target, weight)
 	weapon_sway_target = weapon_sway_target.lerp(Vector3.ZERO, weight)
